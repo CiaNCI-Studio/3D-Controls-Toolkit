@@ -1,0 +1,63 @@
+[gd_scene load_steps=6 format=3 uid="uid://da0p7ggnvomae"]
+
+[ext_resource type="Script" path="res://addons/3d_controls_toolkit/SideScrollingControler3D.gd" id="1_ewjfh"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_06tq4"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ealum"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_vm04h"]
+
+[sub_resource type="Curve" id="Curve_p5bjk"]
+_data = [Vector2(0, 0), 0.0, 2.971, 0, 0, Vector2(0.414698, 0.940849), -0.0834683, -0.0834683, 0, 0, Vector2(0.616798, 0), -8.86051, 0.0, 0, 0]
+point_count = 3
+
+[node name="ExamplePlayer" type="CharacterBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_06tq4")
+
+[node name="Geometry" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_ealum")
+skeleton = NodePath("../CollisionShape3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry"]
+transform = Transform3D(0.905208, 0, 0, 0, -1.96748e-08, 0.501881, 0, -0.45011, -2.19379e-08, 0, 0.369586, -0.243371)
+mesh = SubResource("CylinderMesh_vm04h")
+
+[node name="SideScrollingControler3D" type="Node3D" parent="."]
+script = ExtResource("1_ewjfh")
+Turn_Speed = null
+Camera_Smooth_Distance = null
+Camera_Smooth_Speed = null
+Camera_LookAt_Player = null
+Camera_Lock_Y_Rotation = null
+Camera_Max_Boundary = null
+Camera_Min_Boundary = null
+Spring_Lenght = null
+Angle = null
+Horizontal_Offset = null
+Vertical_Offset = null
+Active = null
+Input_Up = null
+Input_Down = null
+Input_Left = null
+Input_Right = null
+Input_Sprint = null
+Input_Jump = null
+Input_Cancel = null
+Speed_Walk = null
+Speed_Sprint = null
+Acceleration = null
+Deacceleration = null
+Movement_Type = null
+Handle_Gravity = null
+Handle_Mouse_Capture = null
+Jump_Curve = SubResource("Curve_p5bjk")
+Can_Jump = null
+Jump_Velocity = null
+Fall_Multiplier = null
+Coyote_Time = null
+Jump_Buffer_Time = null
+Air_Control = null
+Variable_Jump = null

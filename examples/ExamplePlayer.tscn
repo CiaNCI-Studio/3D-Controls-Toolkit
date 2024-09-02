@@ -1,0 +1,74 @@
+[gd_scene load_steps=9 format=3 uid="uid://da0p7ggnvomae"]
+
+[ext_resource type="Script" path="res://examples/example_player.gd" id="1_1rtbd"]
+[ext_resource type="Script" path="res://addons/3d_controls_toolkit/SideScrollingControler3D.gd" id="1_ewjfh"]
+[ext_resource type="Script" path="res://addons/3d_controls_toolkit/TopDownControler3D.gd" id="1_t548f"]
+[ext_resource type="Script" path="res://addons/3d_controls_toolkit/FirstPersonControler3D.gd" id="2_vkeju"]
+[ext_resource type="Script" path="res://addons/3d_controls_toolkit/ThirdPersonControler3D.gd" id="3_acxhl"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_06tq4"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ealum"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_vm04h"]
+
+[node name="ExamplePlayer" type="CharacterBody3D"]
+script = ExtResource("1_1rtbd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_06tq4")
+
+[node name="Geometry" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_ealum")
+skeleton = NodePath("../CollisionShape3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry"]
+transform = Transform3D(0.905208, 0, 0, 0, -1.96748e-08, 0.501881, 0, -0.45011, -2.19379e-08, 0, 0.369586, -0.243371)
+mesh = SubResource("CylinderMesh_vm04h")
+
+[node name="FirstPersonControler3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3464, 0)
+script = ExtResource("2_vkeju")
+
+[node name="ThirdPersonControler3D" type="Node3D" parent="."]
+script = ExtResource("3_acxhl")
+Active = false
+
+[node name="SideScrollingControler3D" type="Node3D" parent="."]
+script = ExtResource("1_ewjfh")
+Active = false
+
+[node name="TopDownControler3D" type="Node3D" parent="."]
+script = ExtResource("1_t548f")
+Active = false
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -211.0
+offset_bottom = 136.0
+grow_horizontal = 0
+color = Color(0, 0, 0, 0.188235)
+
+[node name="Label" type="Label" parent="Control/ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Change Mode (press key):
+1 - First Peson
+2 - Third Peson
+3 - Side Scrolling
+4 - Top Down"
