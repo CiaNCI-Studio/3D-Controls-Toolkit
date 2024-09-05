@@ -56,14 +56,16 @@ var last_direction : Vector3
 
 func get_gravity() -> Vector3:
 	if Can_Jump:
-		return Vector3(velocity.x,  jump_gravity if velocity.y > 0.0 else fall_gravity, velocity.z)
+		if not jumping:
+			return parent.get_gravity()
+		else:
+			return Vector3(0,  jump_gravity if velocity.y > 0.0 else fall_gravity, 0)
 	else:
 		return parent.get_gravity()
 
 func handle_gravity(delta : float):
 	if Handle_Gravity:
-		if not parent.is_on_floor():
-			velocity += get_gravity() * delta
+		velocity += get_gravity() * delta
 	
 func HandleJump(delta : float) -> void:
 	
