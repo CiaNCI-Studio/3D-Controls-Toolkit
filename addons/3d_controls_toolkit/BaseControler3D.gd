@@ -11,6 +11,10 @@ enum movement_types {
 #Signals
 signal sprint_start
 signal sprint_end
+signal jump_start
+signal jump_cancel
+signal jump_end
+signal hit_ceiling
 
 @export var Active : bool = true
 @export_category("Inputs")
@@ -56,16 +60,15 @@ var last_direction : Vector3
 
 func get_gravity() -> Vector3:
 	if Can_Jump:
-		if not jumping:
-			return parent.get_gravity()
-		else:
-			return Vector3(0,  jump_gravity if velocity.y > 0.0 else fall_gravity, 0)
+		return Vector3(0,  jump_gravity if velocity.y > 0.0 else fall_gravity, 0)
 	else:
 		return parent.get_gravity()
 
 func handle_gravity(delta : float):
-	if Handle_Gravity:
+	if Handle_Gravity and not parent.is_on_floor():
 		velocity += get_gravity() * delta
+	else:
+		velocity.y = 0
 	
 func HandleJump(delta : float) -> void:
 	
@@ -74,6 +77,8 @@ func HandleJump(delta : float) -> void:
 		
 	if parent.is_on_floor():
 		coyote_timer = Coyote_Time;
+		if jumping:
+			emit_signal("jump_end")
 		jumping = false
 	elif coyote_timer > 0: 
 		coyote_timer -= delta
@@ -100,9 +105,14 @@ func HandleJump(delta : float) -> void:
 	
 	if do_jump:
 		jumping = true
+		emit_signal("jump_start")
 		velocity.y = jump_velocity
 		
-	if (Input.is_action_just_released(Input_Jump) and Variable_Jump and jumping) or (parent.is_on_ceiling() and velocity.y > 0) :
+	if (parent.is_on_ceiling() and velocity.y > 0) :
+		emit_signal("hit_ceiling")
+		velocity.y = 0
+	if (Input.is_action_just_released(Input_Jump) and Variable_Jump and jumping) :
+		emit_signal("jump_cancel")
 		velocity.y = 0
 		
 func get_direction(refernce : Node3D = parent) -> Vector3:
@@ -124,37 +134,3 @@ func move():
 			parent.move_and_slide()
 		elif Movement_Type == movement_types.MoveAndCollide:
 			parent.move_and_collide(velocity)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
