@@ -25,10 +25,10 @@ func _ready() -> void:
 	pivot.add_excluded_object(parent)
 	if Custom_Camera:
 		camera = Custom_Camera
-		camera.reparent(pivot)
+		camera.reparent.call_deferred(pivot)
 	else:
 		camera = Camera3D.new()
-		pivot.add_child(camera)	
+		pivot.add_child.call_deferred(camera)	
 	if not Geometry:
 		for child in parent.get_children():
 			if child is MeshInstance3D:

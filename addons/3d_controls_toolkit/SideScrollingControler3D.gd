@@ -35,7 +35,7 @@ func _ready() -> void:
 			pivot.position.x = Horizontal_Offset
 			pivot.position.y = Vertical_Offset	
 			camera = Camera3D.new()		
-			pivot.add_child(camera)	
+			pivot.add_child.call_deferred(camera)	
 			camera.position.z = Spring_Length
 			use_pivot = true
 			
