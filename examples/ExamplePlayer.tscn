@@ -1,10 +1,10 @@
 [gd_scene load_steps=9 format=3 uid="uid://da0p7ggnvomae"]
 
-[ext_resource type="Script" path="res://examples/example_player.gd" id="1_1rtbd"]
-[ext_resource type="Script" path="res://addons/3d_controls_toolkit/SideScrollingControler3D.gd" id="1_ewjfh"]
-[ext_resource type="Script" path="res://addons/3d_controls_toolkit/TopDownControler3D.gd" id="1_t548f"]
-[ext_resource type="Script" path="res://addons/3d_controls_toolkit/FirstPersonControler3D.gd" id="2_vkeju"]
-[ext_resource type="Script" path="res://addons/3d_controls_toolkit/ThirdPersonControler3D.gd" id="3_acxhl"]
+[ext_resource type="Script" uid="uid://b0evvpq7hy0al" path="res://examples/example_player.gd" id="1_1rtbd"]
+[ext_resource type="Script" uid="uid://cb2q8lbrxg15c" path="res://addons/3d_controls_toolkit/SideScrollingControler3D.gd" id="1_ewjfh"]
+[ext_resource type="Script" uid="uid://bmlcebjwc8xi1" path="res://addons/3d_controls_toolkit/TopDownControler3D.gd" id="1_t548f"]
+[ext_resource type="Script" uid="uid://ci7u0w1jbcqmx" path="res://addons/3d_controls_toolkit/FirstPersonControler3D.gd" id="2_vkeju"]
+[ext_resource type="Script" uid="uid://bt5v4mh304ly0" path="res://addons/3d_controls_toolkit/ThirdPersonControler3D.gd" id="3_acxhl"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_06tq4"]
 
@@ -26,21 +26,57 @@ skeleton = NodePath("../CollisionShape3D")
 transform = Transform3D(0.905208, 0, 0, 0, -1.96748e-08, 0.501881, 0, -0.45011, -2.19379e-08, 0, 0.369586, -0.243371)
 mesh = SubResource("CylinderMesh_vm04h")
 
-[node name="FirstPersonControler3D" type="Node3D" parent="."]
+[node name="TopRayCast3D" type="RayCast3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.72771364, 0)
+
+[node name="MiddleRayCast3D" type="RayCast3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -0.053569555, 0)
+
+[node name="FirstPersonControler3D" type="Node3D" parent="." node_paths=PackedStringArray("Wall_Top_Raycast", "Wall_Middle_Raycast")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3464, 0)
 script = ExtResource("2_vkeju")
+Jump_Time_To_Descend = 0.38
+Wall_Jump = true
+Wall_Jump_Diagonal = true
+Wall_Hang = true
+Wall_Slide = true
+Wall_Top_Raycast = NodePath("../Geometry/TopRayCast3D")
+Wall_Middle_Raycast = NodePath("../Geometry/MiddleRayCast3D")
 
-[node name="ThirdPersonControler3D" type="Node3D" parent="."]
+[node name="ThirdPersonControler3D" type="Node3D" parent="." node_paths=PackedStringArray("Wall_Top_Raycast", "Wall_Middle_Raycast")]
 script = ExtResource("3_acxhl")
 Active = false
+Jump_Time_To_Descend = 0.38
+Wall_Jump = true
+Wall_Jump_Diagonal = true
+Wall_Hang = true
+Wall_Slide = true
+Wall_Top_Raycast = NodePath("../Geometry/TopRayCast3D")
+Wall_Middle_Raycast = NodePath("../Geometry/MiddleRayCast3D")
 
-[node name="SideScrollingControler3D" type="Node3D" parent="."]
+[node name="SideScrollingControler3D" type="Node3D" parent="." node_paths=PackedStringArray("Wall_Top_Raycast", "Wall_Middle_Raycast")]
 script = ExtResource("1_ewjfh")
 Active = false
+Can_Dash = true
+Air_Dash = true
+Jump_Time_To_Descend = 0.38
+Wall_Jump = true
+Wall_Jump_Diagonal = true
+Wall_Hang = true
+Wall_Slide = true
+Wall_Top_Raycast = NodePath("../Geometry/TopRayCast3D")
+Wall_Middle_Raycast = NodePath("../Geometry/MiddleRayCast3D")
 
-[node name="TopDownControler3D" type="Node3D" parent="."]
+[node name="TopDownControler3D" type="Node3D" parent="." node_paths=PackedStringArray("Wall_Top_Raycast", "Wall_Middle_Raycast")]
 script = ExtResource("1_t548f")
 Active = false
+Jump_Time_To_Descend = 0.38
+Wall_Jump = true
+Wall_Jump_Diagonal = true
+Wall_Hang = true
+Wall_Slide = true
+Wall_Top_Raycast = NodePath("../Geometry/TopRayCast3D")
+Wall_Middle_Raycast = NodePath("../Geometry/MiddleRayCast3D")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3

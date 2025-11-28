@@ -60,11 +60,15 @@ func _process(delta: float) -> void:
 		return
 	
 	handle_gravity(delta)
-	HandleJump(delta)			
+	HandleJump(delta)
+	HandleDash(delta);
+	HandleWallSlide();
+	HandleWallHang();
 	var direction = get_direction(pivot)
-	var currentSpeed = get_speed()
-		
+	var currentSpeed = get_speed(delta)
+	
 	if direction:
+		last_facing = Vector3(direction.x, 0, direction.z)
 		velocity.x = move_toward(velocity.x, direction.x * currentSpeed, Acceleration * delta)
 		velocity.z = move_toward(velocity.z, direction.z * currentSpeed, Acceleration * delta)
 	else:

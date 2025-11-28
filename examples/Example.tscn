@@ -1,7 +1,7 @@
-[gd_scene load_steps=15 format=3 uid="uid://dyrhpdc6qfb0"]
+[gd_scene load_steps=16 format=3 uid="uid://dyrhpdc6qfb0"]
 
 [ext_resource type="PackedScene" uid="uid://da0p7ggnvomae" path="res://examples/ExamplePlayer.tscn" id="1_gb5wm"]
-[ext_resource type="Script" path="res://examples/example.gd" id="1_s074r"]
+[ext_resource type="Script" uid="uid://c4uj3gstjxgwj" path="res://examples/example.gd" id="1_s074r"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fg6tb"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -32,8 +32,8 @@ cellular_return_type = 0
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0ml6y"]
 width = 1024
 height = 1024
-color_ramp = SubResource("Gradient_lvrrr")
 noise = SubResource("FastNoiseLite_5j5pk")
+color_ramp = SubResource("Gradient_lvrrr")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lcd13"]
 albedo_texture = SubResource("NoiseTexture2D_0ml6y")
@@ -48,6 +48,8 @@ albedo_color = Color(1, 0, 0, 1)
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_lcyr4"]
 data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_adjj0"]
 
 [node name="Example" type="Node3D"]
 script = ExtResource("1_s074r")
@@ -120,6 +122,16 @@ surface_material_override/0 = SubResource("StandardMaterial3D_yo2tt")
 [node name="StaticBody3D" type="StaticBody3D" parent="Plataforms/Plat5"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Plataforms/Plat5/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_lcyr4")
+
+[node name="Plat6" type="MeshInstance3D" parent="Plataforms"]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 27.6947, 1.3493398, 15.288121)
+mesh = SubResource("BoxMesh_adjj0")
+surface_material_override/0 = SubResource("StandardMaterial3D_yo2tt")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Plataforms/Plat6"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Plataforms/Plat6/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_lcyr4")
 
 [node name="ExamplePlayer" parent="." instance=ExtResource("1_gb5wm")]

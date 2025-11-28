@@ -52,10 +52,18 @@ func _process(delta: float) -> void:
 		return
 		
 	handle_gravity(delta)
-	HandleJump(delta)			
+	HandleJump(delta)
+	HandleDash(delta);
+	HandleWallSlide();
+	HandleWallHang();
 	var direction = get_direction()
-	var currentSpeed = get_speed()
+	var currentSpeed = get_speed(delta)
 			
+	if direction.x > 0:
+		last_facing = Vector3(1, 0, 0)
+	elif direction.x < 0:
+		last_facing = Vector3(-1, 0, 0)
+		
 	if direction:
 		velocity.x = move_toward(velocity.x, direction.x * currentSpeed, Acceleration * delta)
 		if Geometry:
@@ -63,13 +71,22 @@ func _process(delta: float) -> void:
 			Geometry.look_at(Vector3(parent.position.x, parent.position.y, parent.position.z) + direction)
 			var target_y = Geometry.rotation.y
 			Geometry.rotation.y = lerp_angle(prev_y, target_y, delta * Turn_Speed)
-		if Handle_Camera:
-			if use_pivot:		
+			
+				
+		if Handle_Camera and not parent.is_on_wall():
+			if use_pivot:
 				if Camera_Smooth_Distance and abs(pivot.position.x) < Camera_Smooth_Distance:	
 					pivot.position.x = move_toward(pivot.position.x, direction.x * currentSpeed * -1, Camera_Smooth_Speed * delta)
 			else:
 				if Camera_Smooth_Distance and abs(camera.position.x) < Camera_Smooth_Distance:	
 					camera.position.x = move_toward(camera.position.x, direction.x * currentSpeed * -1, Camera_Smooth_Speed * delta)
+		else:
+			if Camera_Smooth_Distance and Handle_Camera:		
+				if use_pivot:		
+					pivot.position.x = move_toward(pivot.position.x, Horizontal_Offset, Camera_Smooth_Speed * delta)
+				else:
+					camera.position.x = move_toward(camera.position.x, Horizontal_Offset, Camera_Smooth_Speed * delta)
+	
 	else:		
 		velocity.x = move_toward(velocity.x, 0, Deacceleration * delta)		
 		if Camera_Smooth_Distance and Handle_Camera:		
