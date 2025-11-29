@@ -22,7 +22,7 @@ func _ready() -> void:
 	add_child(pivot)
 	pivot.global_rotation.x = deg_to_rad(Start_Angle)
 	pivot.position.x = Horizontal_Offset
-	pivot.add_excluded_object(parent)
+	pivot.add_excluded_object(_parent)
 	if Custom_Camera:
 		camera = Custom_Camera
 		camera.reparent.call_deferred(pivot)
@@ -30,7 +30,7 @@ func _ready() -> void:
 		camera = Camera3D.new()
 		pivot.add_child.call_deferred(camera)	
 	if not Geometry:
-		for child in parent.get_children():
+		for child in _parent.get_children():
 			if child is MeshInstance3D:
 				Geometry = child
 				continue
@@ -47,7 +47,7 @@ func _input(event):
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE	
 			
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		parent.rotate_y(deg_to_rad(-(event as InputEventMouseMotion).relative.x * Mouse_Sensitivity))
+		_parent.rotate_y(deg_to_rad(-(event as InputEventMouseMotion).relative.x * Mouse_Sensitivity))
 		if Geometry:
 			Geometry.rotate_y(deg_to_rad((event as InputEventMouseMotion).relative.x * Mouse_Sensitivity))
 		pivot.rotate_x(deg_to_rad(-(event as InputEventMouseMotion).relative.y * Mouse_Sensitivity))
@@ -57,27 +57,27 @@ func _process(delta: float) -> void:
 	if not Active:
 		return
 			
-	handle_gravity(delta)
+	HandleGravity(delta)
 	HandleJump(delta)
 	HandleDash(delta);
 	HandleWallSlide();
 	HandleWallHang();
-	var direction = get_direction()
-	var currentSpeed = get_speed(delta)
+	var direction = GetDirection()
+	var currentSpeed = GetSpeed(delta)
 			
 
 	if direction:
-		last_facing = Vector3(direction.x, 0, direction.z)
-		velocity.x = move_toward(velocity.x, direction.x * currentSpeed, Acceleration * delta)
-		velocity.z = move_toward(velocity.z, direction.z * currentSpeed, Acceleration * delta)
+		_lastFacing = Vector3(direction.x, 0, direction.z)
+		_velocity.x = move_toward(_velocity.x, direction.x * currentSpeed, Acceleration * delta)
+		_velocity.z = move_toward(_velocity.z, direction.z * currentSpeed, Acceleration * delta)
 		if Geometry:
 			var prev_y = Geometry.rotation.y
-			Geometry.look_at(Vector3(parent.position.x, parent.position.y + Vertical_Look_At_Offset, parent.position.z) + direction)
+			Geometry.look_at(Vector3(_parent.position.x, _parent.position.y + Vertical_Look_At_Offset, _parent.position.z) + direction)
 			var target_y = Geometry.rotation.y
 			Geometry.rotation.y = lerp_angle(prev_y, target_y, delta * Turn_Speed)
 	else:
-		velocity.x = move_toward(velocity.x, 0, Deacceleration * delta)
-		velocity.z = move_toward(velocity.z, 0, Deacceleration * delta)
+		_velocity.x = move_toward(_velocity.x, 0, Deacceleration * delta)
+		_velocity.z = move_toward(_velocity.z, 0, Deacceleration * delta)
 		
 	move()
 

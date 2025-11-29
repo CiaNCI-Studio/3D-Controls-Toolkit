@@ -40,7 +40,7 @@ func _ready() -> void:
 			use_pivot = true
 			
 	if not Geometry:
-		for child in parent.get_children():
+		for child in _parent.get_children():
 			if child is MeshInstance3D:
 				Geometry = child
 				continue
@@ -51,29 +51,29 @@ func _process(delta: float) -> void:
 	if not Active:
 		return
 		
-	handle_gravity(delta)
+	HandleGravity(delta)
 	HandleJump(delta)
 	HandleDash(delta);
 	HandleWallSlide();
 	HandleWallHang();
-	var direction = get_direction()
-	var currentSpeed = get_speed(delta)
+	var direction = GetDirection()
+	var currentSpeed = GetSpeed(delta)
 			
 	if direction.x > 0:
-		last_facing = Vector3(1, 0, 0)
+		_lastFacing = Vector3(1, 0, 0)
 	elif direction.x < 0:
-		last_facing = Vector3(-1, 0, 0)
+		_lastFacing = Vector3(-1, 0, 0)
 		
 	if direction:
-		velocity.x = move_toward(velocity.x, direction.x * currentSpeed, Acceleration * delta)
+		_velocity.x = move_toward(_velocity.x, direction.x * currentSpeed, Acceleration * delta)
 		if Geometry:
 			var prev_y = Geometry.rotation.y
-			Geometry.look_at(Vector3(parent.position.x, parent.position.y, parent.position.z) + direction)
+			Geometry.look_at(Vector3(_parent.position.x, _parent.position.y, _parent.position.z) + direction)
 			var target_y = Geometry.rotation.y
 			Geometry.rotation.y = lerp_angle(prev_y, target_y, delta * Turn_Speed)
 			
 				
-		if Handle_Camera and not parent.is_on_wall():
+		if Handle_Camera and not _parent.is_on_wall():
 			if use_pivot:
 				if Camera_Smooth_Distance and abs(pivot.position.x) < Camera_Smooth_Distance:	
 					pivot.position.x = move_toward(pivot.position.x, direction.x * currentSpeed * -1, Camera_Smooth_Speed * delta)
@@ -88,7 +88,7 @@ func _process(delta: float) -> void:
 					camera.position.x = move_toward(camera.position.x, Horizontal_Offset, Camera_Smooth_Speed * delta)
 	
 	else:		
-		velocity.x = move_toward(velocity.x, 0, Deacceleration * delta)		
+		_velocity.x = move_toward(_velocity.x, 0, Deacceleration * delta)		
 		if Camera_Smooth_Distance and Handle_Camera:		
 			if use_pivot:		
 				pivot.position.x = move_toward(pivot.position.x, Horizontal_Offset, Camera_Smooth_Speed * delta)
@@ -97,7 +97,7 @@ func _process(delta: float) -> void:
 					
 	if Handle_Camera:
 		if Camera_LookAt_Player:
-			camera.look_at(parent.global_position)
+			camera.look_at(_parent.global_position)
 			if Camera_Lock_Y_Rotation:
 				camera.rotation.y = 0
 			camera.rotation.z = 0

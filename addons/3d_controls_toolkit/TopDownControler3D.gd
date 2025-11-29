@@ -44,7 +44,7 @@ func _ready() -> void:
 			use_pivot = true	
 		
 	if not Geometry:
-		for child in parent.get_children():
+		for child in _parent.get_children():
 			if child is MeshInstance3D:
 				Geometry = child
 				continue
@@ -66,7 +66,7 @@ func _process(delta: float) -> void:
 	if not Active:
 		return
 		
-	handle_gravity(delta)
+	HandleGravity(delta)
 	HandleJump(delta)			
 	HandleDash(delta);
 	HandleWallSlide();
@@ -82,16 +82,16 @@ func _process(delta: float) -> void:
 
 	
 func handle_directional_action(delta :float):
-	var direction = get_direction()
-	var currentSpeed = get_speed(delta)
+	var direction = GetDirection()
+	var currentSpeed = GetSpeed(delta)
 	
-	last_facing = Vector3(direction.x, 0, direction.z)
+	_lastFacing = Vector3(direction.x, 0, direction.z)
 	if direction:
-		velocity.x = move_toward(velocity.x, direction.x * currentSpeed, Acceleration * delta)
-		velocity.z = move_toward(velocity.z, direction.z * currentSpeed, Acceleration * delta)
+		_velocity.x = move_toward(_velocity.x, direction.x * currentSpeed, Acceleration * delta)
+		_velocity.z = move_toward(_velocity.z, direction.z * currentSpeed, Acceleration * delta)
 		if Geometry:
 			var prev_y = Geometry.rotation.y
-			Geometry.look_at(Vector3(parent.position.x, parent.position.y, parent.position.z) + direction)
+			Geometry.look_at(Vector3(_parent.position.x, _parent.position.y, _parent.position.z) + direction)
 			var target_y = Geometry.rotation.y
 			Geometry.rotation.y = lerp_angle(prev_y, target_y, delta * Turn_Speed)
 		if Handle_Camera:
@@ -106,8 +106,8 @@ func handle_directional_action(delta :float):
 				if Camera_Smooth_Distance and abs(camera.position.z) < Camera_Smooth_Distance:	
 					camera.position.z = move_toward(camera.position.z, direction.z * currentSpeed * -1, Camera_Smooth_Speed * delta)
 	else:		
-		velocity.x = move_toward(velocity.x, 0, Deacceleration * delta)		
-		velocity.z = move_toward(velocity.z, 0, Deacceleration * delta)		
+		_velocity.x = move_toward(_velocity.x, 0, Deacceleration * delta)		
+		_velocity.z = move_toward(_velocity.z, 0, Deacceleration * delta)		
 		if Camera_Smooth_Distance and Handle_Camera:
 			if use_pivot:		
 				pivot.position.x = move_toward(pivot.position.x, Horizontal_Offset, Camera_Smooth_Speed * delta)
@@ -117,24 +117,24 @@ func handle_directional_action(delta :float):
 				camera.position.z = move_toward(camera.position.z, Horizontal_Offset, Camera_Smooth_Speed * delta)		
 
 func handle_move_to_click_action(delta :float):
-	var currentSpeed = get_speed(delta)
+	var currentSpeed = GetSpeed(delta)
 	
 	if target:
 		if Geometry:
 			var prev_y = Geometry.rotation.y
-			Geometry.look_at(Vector3(target.x, parent.position.y, target.z) )
+			Geometry.look_at(Vector3(target.x, _parent.position.y, target.z) )
 			var target_y = Geometry.rotation.y
 			Geometry.rotation.y = lerp_angle(prev_y, target_y, delta * Turn_Speed)
 			
-		var direction = parent.global_position.direction_to(target)
+		var direction = _parent.global_position.direction_to(target)
 		
 		if direction:
-			last_facing = Vector3(direction.x, 0, direction.z)
-			velocity.x = move_toward(velocity.x, direction.x * currentSpeed, Acceleration * delta)
-			velocity.z = move_toward(velocity.z, direction.z * currentSpeed, Acceleration * delta)		
+			_lastFacing = Vector3(direction.x, 0, direction.z)
+			_velocity.x = move_toward(_velocity.x, direction.x * currentSpeed, Acceleration * delta)
+			_velocity.z = move_toward(_velocity.z, direction.z * currentSpeed, Acceleration * delta)		
 		else:
-			velocity.x = move_toward(velocity.x, 0, Deacceleration * delta)		
-			velocity.z = move_toward(velocity.z, 0, Deacceleration * delta)	
+			_velocity.x = move_toward(_velocity.x, 0, Deacceleration * delta)		
+			_velocity.z = move_toward(_velocity.z, 0, Deacceleration * delta)	
 			
 		if transform.origin.distance_to(target) < .5:
 			target = Vector3.ZERO			

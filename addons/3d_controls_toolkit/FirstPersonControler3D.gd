@@ -33,7 +33,7 @@ func _ready() -> void:
 		camera = Camera3D.new()
 		pivot.add_child.call_deferred(camera)	
 	if not Geometry:
-		for child in parent.get_children():
+		for child in _parent.get_children():
 			if child is MeshInstance3D:
 				Geometry = child
 				continue
@@ -59,21 +59,21 @@ func _process(delta: float) -> void:
 	if not Active:
 		return
 	
-	handle_gravity(delta)
+	HandleGravity(delta)
 	HandleJump(delta)
 	HandleDash(delta);
 	HandleWallSlide();
 	HandleWallHang();
-	var direction = get_direction(pivot)
-	var currentSpeed = get_speed(delta)
+	var direction = GetDirection(pivot)
+	var currentSpeed = GetSpeed(delta)
 	
 	if direction:
-		last_facing = Vector3(direction.x, 0, direction.z)
-		velocity.x = move_toward(velocity.x, direction.x * currentSpeed, Acceleration * delta)
-		velocity.z = move_toward(velocity.z, direction.z * currentSpeed, Acceleration * delta)
+		_lastFacing = Vector3(direction.x, 0, direction.z)
+		_velocity.x = move_toward(_velocity.x, direction.x * currentSpeed, Acceleration * delta)
+		_velocity.z = move_toward(_velocity.z, direction.z * currentSpeed, Acceleration * delta)
 	else:
-		velocity.x = move_toward(velocity.x, 0, Deacceleration * delta)
-		velocity.z = move_toward(velocity.z, 0, Deacceleration * delta)
+		_velocity.x = move_toward(_velocity.x, 0, Deacceleration * delta)
+		_velocity.z = move_toward(_velocity.z, 0, Deacceleration * delta)
 		
 	move()
 	
