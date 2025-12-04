@@ -93,6 +93,7 @@ var Dashing : bool = false
 var WallHangJumping : bool = false
 var WallHanging : bool = false
 var WallSliding : bool = false
+var LastFacing : Vector3 = Vector3.ZERO
 
 var _velocity : Vector3 = Vector3.ZERO
 var _coyoteTimer : float = 0
@@ -100,7 +101,6 @@ var _jumpBufferTimer : float = 0
 var _lastDirection : Vector3
 var _dashTimer : float = 0
 var _dashCooldownTimer : float = 0
-var _lastFacing : Vector3 = Vector3.ZERO
 var _dashHangTimer : float = 0
 var _doubleJumpExecuted : bool = false
 var _sprintTimer : float = 0
@@ -249,7 +249,7 @@ func HandleDash(delta : float):
 			dash_end.emit()
 			_dashCooldownTimer = Dash_Cooldown
 		if Dashing:
-			_velocity = _lastFacing * Dash_Speed
+			_velocity = LastFacing * Dash_Speed
 		return
 	
 	var dashPreRequisites = (_parent.is_on_floor() or Air_Dash) and _dashCooldownTimer <= 0.1 and not Dashing and _dashCharge == 100

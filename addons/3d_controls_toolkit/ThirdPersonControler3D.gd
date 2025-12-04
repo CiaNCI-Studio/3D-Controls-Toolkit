@@ -67,7 +67,7 @@ func _process(delta: float) -> void:
 			
 
 	if direction:
-		_lastFacing = Vector3(direction.x, 0, direction.z)
+		LastFacing = Vector3(direction.x, 0, direction.z)
 		_velocity.x = move_toward(_velocity.x, direction.x * currentSpeed, Acceleration * delta)
 		_velocity.z = move_toward(_velocity.z, direction.z * currentSpeed, Acceleration * delta)
 		if Geometry:

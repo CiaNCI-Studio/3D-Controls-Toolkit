@@ -85,7 +85,7 @@ func handle_directional_action(delta :float):
 	var direction = GetDirection()
 	var currentSpeed = GetSpeed(delta)
 	
-	_lastFacing = Vector3(direction.x, 0, direction.z)
+	LastFacing = Vector3(direction.x, 0, direction.z)
 	if direction:
 		_velocity.x = move_toward(_velocity.x, direction.x * currentSpeed, Acceleration * delta)
 		_velocity.z = move_toward(_velocity.z, direction.z * currentSpeed, Acceleration * delta)
@@ -129,7 +129,7 @@ func handle_move_to_click_action(delta :float):
 		var direction = _parent.global_position.direction_to(target)
 		
 		if direction:
-			_lastFacing = Vector3(direction.x, 0, direction.z)
+			LastFacing = Vector3(direction.x, 0, direction.z)
 			_velocity.x = move_toward(_velocity.x, direction.x * currentSpeed, Acceleration * delta)
 			_velocity.z = move_toward(_velocity.z, direction.z * currentSpeed, Acceleration * delta)		
 		else:

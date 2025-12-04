@@ -3,6 +3,10 @@ class_name SideScrollingControler3D
 
 @export_category("Movement")
 @export var Turn_Speed = 10
+@export var Block_Up : bool = true
+@export var Block_Down : bool = true
+@export var Full_Turn : bool = true 
+@export var Start_Facing : int = -1 
 
 @export_category("Camera")
 @export var Handle_Camera : bool = true
@@ -45,6 +49,7 @@ func _ready() -> void:
 				Geometry = child
 				continue
 				
+	LastFacing = Vector3(Start_Facing, 0, 0)
 	toggle_active(Active)
 
 func _process(delta: float) -> void:
@@ -60,13 +65,24 @@ func _process(delta: float) -> void:
 	var currentSpeed = GetSpeed(delta)
 			
 	if direction.x > 0:
-		_lastFacing = Vector3(1, 0, 0)
+		LastFacing = Vector3(1, 0, 0)
 	elif direction.x < 0:
-		_lastFacing = Vector3(-1, 0, 0)
-		
+		LastFacing = Vector3(-1, 0, 0)
+	
+	if (Block_Up and direction.z < 0) or (Block_Down and direction.z > 0):
+		direction.z = 0
+	
+	if Full_Turn and Geometry:
+		var prev_y = Geometry.rotation.y
+		Geometry.look_at(Vector3(_parent.position.x, _parent.position.y, _parent.position.z) + LastFacing)
+		var target_y = Geometry.rotation.y
+		if prev_y != target_y:
+			Geometry.rotation.y = lerp_angle(prev_y, target_y, delta * Turn_Speed)
+	
+	
 	if direction:
 		_velocity.x = move_toward(_velocity.x, direction.x * currentSpeed, Acceleration * delta)
-		if Geometry:
+		if Geometry and not Full_Turn:
 			var prev_y = Geometry.rotation.y
 			Geometry.look_at(Vector3(_parent.position.x, _parent.position.y, _parent.position.z) + direction)
 			var target_y = Geometry.rotation.y
