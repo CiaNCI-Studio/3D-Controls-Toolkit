@@ -1,6 +1,6 @@
 # 3D Controls Toolkit
 
-3D Controls plugin For Godot 4.3:
+3D Controls plugin For Godot 4.5:
 	
 Includes:
 	
@@ -34,7 +34,10 @@ Other configurations:
 	* Acceleration
 	* Deacceleration
 	* Movement Type = "Move and Slide" or "Move and Collide" or "None" (Movement must be handled on player code)
-
+	* Dash
+	* Wall Climb
+	* Double Jump
+	
 * First Person:
 	* Mouse Sensitivity
 	* Turn Speed
